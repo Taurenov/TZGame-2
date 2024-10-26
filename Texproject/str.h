@@ -33,8 +33,8 @@ public:
 	MyString& operator+= (char* source);
 	MyString& operator+= (const char* source);
 
-	MyString lower();
-	MyString upper();
+	MyString& lower();
+	MyString& upper();
 	MyString& to_lower();
 	MyString& to_upper();
 	const char* c_str();

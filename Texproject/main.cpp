@@ -4,14 +4,11 @@
 #include "str.h"
 
 bool sort_fn(MyString* a, MyString* b) {
-    MyString lower_a = a->lower();
-    MyString lower_b = b->lower();
-    std::cout << "Comparing: " << lower_a.c_str() << " with " << lower_b.c_str() << std::endl;
-    return lower_a.c_str()[0] < lower_b.c_str()[0];
+    return a->lower().c_str()[0] < b->lower().c_str()[0];
 }
 
 int main() {
-    std::vector<MyString*> strings = {
+   std::vector<MyString*> strings = {
         new MyString("Banana"),
         new MyString("Apple"),
         new MyString("Cherry"),
@@ -31,13 +28,7 @@ int main() {
         std::cout << str->c_str() << std::endl;
     }
 
-    std::cout << "Deleting strings..." << std::endl;
-    for (auto& str : strings) {
-        std::cout << "Deleting: " << str->c_str() << std::endl;
+    for (auto& str : strings)
         delete str;
-        str = nullptr;
-    }
-
-    std::cout << "All strings deleted successfully." << std::endl;
     return 0;
 }

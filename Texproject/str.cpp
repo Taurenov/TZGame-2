@@ -2,6 +2,11 @@
 #include <vector>
 #include <algorithm>
 #include "str.h"
+#include <cstring>
+
+MyString::MyString() : data(nullptr), size(0) {
+	std::cout << "Default constructor called\n";
+}
 
 size_t MyString::get_len(char* source)
 {
@@ -14,16 +19,12 @@ size_t MyString::get_len(char* source)
 size_t MyString::get_len(const char* source)
 {
 	size_t len = 0;
-	while (source[len] != '\0')
+	while (source && source[len] != '\0') {
 		len++;
+	}
 	return len;
 }
 
-MyString::MyString()
-{
-	data = nullptr;
-	size = 0;
-}
 MyString::MyString(char* source)
 {
 	if (!source) {
@@ -38,16 +39,19 @@ MyString::MyString(char* source)
 }
 MyString::MyString(const char* source)
 {
-	if (!source) {
+	if (source) {
+		size = get_len(source);
+		data = new char[size + 1];
+		std::memcpy(data, source, size);
+		data[size] = '\0';  // Завершающий нуль-символ
+	}
+	else {
 		data = nullptr;
 		size = 0;
-		return;
 	}
-	size = get_len(source);
-	data = new char[size + 1];
-	memcpy(data, source, size);
-	data[size] = '\0';  // Завершение строки
 }
+
+
 MyString::MyString(std::vector<char> source)
 {
 	size = source.size();
@@ -59,8 +63,8 @@ MyString::~MyString()
 	if (data) {
 	delete[] data;
 	data = nullptr;
-}
-size = 0;
+	}
+	size = 0;
 }
 
 MyString& MyString::operator=(const MyString& source)
@@ -208,27 +212,27 @@ MyString& MyString::operator+=(const char* source)
 	return *this;
 }
 
-MyString MyString::lower()
+MyString& MyString::lower()
 {
-	MyString result(*this);
+	MyString* result =new MyString(this->data);
 	for (size_t i = 0; i < size; i++)
 	{
-		auto it = lower_list.find(result.data[i]);
+		auto it = lower_list.find(result->data[i]);
 		if (it != lower_list.end())
-			result.data[i] = it->second;
+			result->data[i] = it->second;
 	}
-	return result;
+	return *result;
 }
-MyString MyString::upper()
+MyString& MyString::upper()
 {
-	MyString result(*this);
+	MyString* result = new MyString(this->data);
 	for (size_t i = 0; i < size; i++)
 	{
-		auto it = upper_list.find(result.data[i]);
+		auto it = upper_list.find(result->data[i]);
 		if (it != upper_list.end())
-			result.data[i] = it->second;
+			result->data[i] = it->second;
 	}
-	return result;
+	return *result;
 }
 MyString& MyString::to_lower()
 {
